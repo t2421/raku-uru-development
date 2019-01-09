@@ -1,12 +1,123 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>raku-uru</title>
-        <[-- HEADER_CUSTOM_CONTENTS --]>
-    </head>
-    <body>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width">
+	<meta name="format-detection" content="telephone=no">
+	<title>{% if dsnTopTitle is not empty %}{{ dsnTopTitle }}{% else %}{% if pageTitle is not empty %}{{pageTitle}} | {% elseif campaignPageTtl is not empty %}{{campaignPageTtl}} | {% elseif categoryPageTtl is not empty %}{{categoryPageTtl}} | {% elseif itemData.title is not empty %}{{itemData.title}} | {% elseif itemData.itemName is not empty %}{{ itemData.itemName }} | {% elseif title2 is not empty %}{{ title2 }} | {% elseif title1 is not empty %}{{ title1 }} | {% endif %}{{ shopName }}{% endif %}</title>
+
+	<meta property="og:site_name" content="{{ shopName }}"> 
+	{% if itemData != null %}<!-- 商品詳細の場合 -->
+	<meta name="description" content="{{ itemData.metadescription }}">
+	<meta property="og:image" content="{{ itemData.ogImageUrl }}">
+	<meta property="og:title" content="{{ itemData.ogTitle }}">
+	<meta property="og:type" content="{{ itemData.ogType }}">
+	<meta property="og:url" content="{{ thisUrl }}">
+	<meta property="og:description" content="{{ itemData.metadescription }}"> 
+	{% endif %}{% if campaignDescription != null %}<meta name="description" content="{{ campaignDescription }}">
+	{% endif %}{% if categoryDescription != null %}<meta name="description" content="{{ categoryDescription }}">
+	{% endif %}{% if freeDescription != null %}<meta name="description" content="{{ freeDescription }}">
+	{% endif %}{% if dsnTopMetadescription is not empty %}<meta name="description" content="{{ dsnTopMetadescription }}">
+	{% endif %}
+
+	{% if topFaviconUrl is not empty %}
+	<link rel="shortcut icon" href="{{ topFaviconUrl }}">
+	<link rel="icon" type="image/vnd.microsoft.icon" href="{{ topFaviconUrl }}">
+	{% endif %}
+	<link href="{{ cssAddr }}" rel="stylesheet" type="text/css">
+	<!--[if lt IE 10]>
+		<style type="text/css">label:after {display:none;}</style>
+	<![endif]-->
+	<[-- HEADER_CUSTOM_CONTENTS --]>
+	{% if robots is not empty %}<meta name="robots" content="{{ robots }}">{% endif %}
+	{% if canonicalUrl is not empty %}<link rel="canonical" href="{{ canonicalUrl }}">{% endif %}
+	{% if prevUrl is not empty %}<link rel="prev" href="{{ prevUrl }}">{% endif %}
+	{% if nextUrl is not empty %}<link rel="next" href="{{ nextUrl }}">{% endif %}
+</head>
+
+<body{% if cartLoginStatus == 1 %} class="login"{% endif %}>
+
+		<div>
+			<ul>
+                {% if newMemRegistFlag == 1 and cartLoginStatus != 1 %}
+                    <li><a href="{{ shpCartUrl }}/member/regist/input/{{ shpHash }}">会員登録</a></li>
+                {% endif %}
+                {% if registValidFlag == 1 %}
+                    {% if cartLoginStatus == 1 %}
+                    <li><a href="{{ shpCartUrl }}/logout/{{ shpHash }}">ログアウト</a></li>
+                    {% endif %}
+                    <li><a href="{{ shpCartUrl }}/mypage/login/{{ shpHash }}">マイページ</a></li>
+                {% endif %}
+                    <li><a href="{{ shpCartUrl }}/cart/{{ shpHash }}">カート</a></li>
+            </ul>
+			<h1><a href="/">{% if hdrLogoDispFlag == 1 and hdrLogoImageUrl is not empty %}<img src="{{ hdrLogoImageUrl }}" alt="{{ shopName }}">{% else %}<p>{{ shopName }}</p>{% endif %}</a></h1>
+		</div>
+      
+       
+        {% if breadCrumbsList is not empty %}
+            <div class="bread">
+                <ul class="clearfix">
+                    {% for item in breadCrumbsList %} {% if loop.index < loop.length - 1 %}
+                    <li><a href="{{ item.url }}"><span>{{ item.displayValue }}</span></a></li>
+                    {% else %}
+                    <li><span>{{ item.displayValue }}</span></li>
+                    {% endif %} {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <[-- MAIN_CONTENTS --]>
-        <[-- BODY_CUSTOM_CONTENTS --]>
-    </body>
+
+        <ul>
+            {% set campaignItemCounter = 0 %} 
+            {% for item in campaignList %} {% if item.itemCount > 0 %} {% set campaignItemCounter = 1 %} {% endif %} {% endfor %}
+            {% if campaignList is not empty and campaignItemCounter > 0 %}
+            <li>
+                <div>
+                    <p>CAMPAIGN</p><span>キャンペーン情報</span>
+                </div>
+                <ul>
+                    {% for item in campaignList %} {% if item.itemCount > 0 %}
+                    <li>
+                        <a href="/item-list?campaignId={{ item.campaignId }}">
+                            <p>{{ item.campaignName }}</p>
+                        </a>
+                    </li>
+                    {% endif %} {% endfor %}
+                </ul>
+            </li>
+            {% endif %}
+            {% set categoryItemCounter = 0 %}
+            {% for item in categoryList %} {% if item.itemCount > 0 %} {% set categoryItemCounter = 1 %} {% endif %} {% endfor %}
+            {% if categoryList is not empty and categoryItemCounter > 0 %}
+            <li>
+                <div>
+                    <p>CATEGORY</p><span>カテゴリー</span>
+                </div>
+                <ul>
+                    {% for item in categoryList %} {% if item.itemCount > 0 %}
+                    <li>
+                        <a href="/item-list?categoryId={{ item.categoryId }}">
+                            <p>{{ item.categoryName }}</p>
+                        </a>
+                        {% if item.childList is not empty %}
+                        <ul>
+                            {% for child in item.childList %} {% if child.itemCount > 0 %}
+                            <li>
+                                <a href="/item-list?categoryId={{ child.categoryId }}">
+                                    <p>{{ child.categoryName }}</p>
+                                </a>
+                            </li>
+                      {% endif %} {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </li>
+                    {% endif %} {% endfor %}
+                </ul>
+            </li>
+            {% endif %}
+        </ul>
+	<[-- BODY_CUSTOM_CONTENTS --]>
+</body>
 </html>
