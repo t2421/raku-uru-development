@@ -1,1 +1,117 @@
-<h1>top</h1>
+<div class="main">
+	{% if dsnTopVisualDispFlag == 1 %}
+		{{ dsnTopHtmlTag }}
+	{% endif %}
+	{% if dsnTopDispFlag1Shop == 1 %}
+	<div id="top-shop-message1">
+		<div>{{ dsnTopDesc1Shop }}</div>
+	</div>
+	{% endif %}
+	{% if dsnTopDispFlagInfo == 1 and freepageList is not empty %}
+	<div id="top-news">
+		<div class="ttl">
+			{% if dsnTopTitle1Info is not empty %}<h2>{{ dsnTopTitle1Info }}</h2>{% endif %}
+			{% if dsnTopTitle2Info is not empty %}<h3>{{ dsnTopTitle2Info }}</h3>{% endif %}
+		</div>
+		<div class="news-list clearfix">
+			{% for item in freepageList %}
+			<dl>
+				<dt>{{ item.updateTime }}</dt>
+				<dd><a href="/fr/{{ item.freepageSerialNo }}">{{ item.title }}</a></dd>
+			</dl>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	{% if dsnTopDispFlagNewItem == 1 and itemRecentList is not empty %}
+	<div id="top-newarrival">
+		<div class="ttl">
+			{% if dsnTopTitle1NewItem is not empty %}<h2>{{ dsnTopTitle1NewItem }}</h2>{% endif %}
+			{% if dsnTopTitle2NewItem is not empty %}<h3>{{ dsnTopTitle2NewItem }}</h3>{% endif %}
+		</div>
+		<div class="product-list clearfix">
+			{% for item in itemRecentList %}
+			<div class="product-list-item">
+				<a href="/item-detail/{{ item.itemId }}">
+					<div class="product-list-photo{% if item.badgeId != null %} icn-badge{{ item.badgeId }}{% endif %}">
+						{% if item.dispMediaUrl is not empty %}
+						<img src="{{ item.dispMediaUrlSmall }}" alt="{{ item.itemName }}"> {% elseif item.mediaUrl is not empty %}
+						<img src="{{ item.mediaUrlSmall }}" alt="{{ item.itemName }}"> {% else %}
+						<img src="{{ item.mediaUrlSmall }}" alt="{{ item.itemName }}"> {% endif %}
+					</div>
+					<div class="product-list-info">
+						<p class="product-list-name {% if item.shpRsvFlag == 1 %} icn-reservation {% endif %}">{{ item.itemName }}</p>
+						<p class="product-list-price"><span class="product-list-num">{{ item.displayPrice }}</span><span class="product-list-tax">{{ item.displayTax }}</span></p>
+					</div>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	{% if dsnTopDispFlagRanking == 1 and itemRecommendList is not empty %}
+	<div id="top-ranking">
+		<div class="ttl">
+			{% if dsnTopTitle1Ranking is not empty %}<h2>{{ dsnTopTitle1Ranking }}</h2>{% endif %}
+			{% if dsnTopTitle2Ranking is not empty %}<h3>{{ dsnTopTitle2Ranking }}</h3>{% endif %}
+		</div>
+		<div class="product-list clearfix">
+			{% for item in itemRecommendList %}
+			<div class="product-list-item">
+				<a href="/item-detail/{{ item.itemId }}">
+					<div class="product-list-photo">
+						<div class="icn-rank icn-rank{{ loop.index + 1 }}"><span>{{ loop.index + 1 }}</span></div>
+						{% if item.dispMediaUrl is not empty %}
+						<img src="{{ item.dispMediaUrlSmall }}" alt="{{ item.itemName }}"> {% elseif item.mediaUrl is not empty %}
+						<img src="{{ item.mediaUrlSmall }}" alt="{{ item.itemName }}"> {% else %}
+						<img src="{{ item.mediaUrlSmall }}" alt="{{ item.itemName }}"> {% endif %}
+					</div>
+					<div class="product-list-info">
+						<p class="product-list-name {% if item.shpRsvFlag == 1 %} icn-reservation {% endif %}">{{ item.itemName }}</p>
+						<p class="product-list-price"><span class="product-list-num">{{ item.displayPrice }}</span><span class="product-list-tax">{{ item.displayTax }}</span></p>
+					</div>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	{% if dsnTopDispFlagSalesRanking == 1 and itemSalesRankingList is not empty %}
+	<div id="top-salesranking">
+		<div class="ttl">
+			{% if dsnTopTitle1SalesRanking is not empty %}<h2>{{ dsnTopTitle1SalesRanking }}</h2>{% endif %}
+			{% if dsnTopTitle2SalesRanking is not empty %}<h3>{{ dsnTopTitle2SalesRanking }}</h3>{% endif %}
+		</div>
+		<div class="product-list clearfix">
+			{% for item in itemSalesRankingList %}
+			<div class="product-list-item">
+				<a href="/item-detail/{{ item.itemId }}">
+					<div class="product-list-photo">
+						<div class="icn-rank icn-rank{{ loop.index + 1 }}"><span>{{ loop.index + 1 }}</span></div>
+						{% if item.dispMediaUrl is not empty %}
+						<img src="{{ item.dispMediaUrlSmall }}" alt="{{ item.itemName }}"> {% elseif item.mediaUrl is not empty %}
+						<img src="{{ item.mediaUrlSmall }}" alt="{{ item.itemName }}"> {% else %}
+						<img src="{{ item.mediaUrlSmall }}" alt="{{ item.itemName }}"> {% endif %}
+					</div>
+					<div class="product-list-info">
+						<p class="product-list-name {% if item.shpRsvFlag == 1 %} icn-reservation {% endif %}">{{ item.itemName }}</p>
+						<p class="product-list--variation">{{ item.variationName }}</p>
+						<p class="product-list-price"><span class="product-list-num">{{ item.displayPrice }}</span><span class="product-list-tax">{{ item.displayTax }}</span></p>
+					</div>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	{% if dsnTopDispFlag2Shop == 1 %}
+	<div id="top-shop-message2">
+		<div>{{ dsnTopDesc2Shop }}</div>
+	</div>
+	{% endif %}
+</div>
+<!-- /.main -->

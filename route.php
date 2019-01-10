@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/data/top_data.php';
 
 $dispatcher= FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $router) {
     $router->get('/', 'index');
@@ -41,7 +42,8 @@ function itemIndex(){
     renderContents('item_index.html');
 }
 function top(){
-    renderContents('top.html');
+    global $top_data;
+    renderContents('top.html',$top_data);
 }
 
 
