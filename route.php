@@ -1,11 +1,13 @@
 <?php
 require_once __DIR__.'/data/top_data.php';
+require_once __DIR__.'/data/mail_data.php';
 
 $dispatcher= FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $router) {
     $router->get('/', 'index');
     $router->get('/top', 'top');
     $router->get('/item', 'itemIndex');
     $router->get('/item/{id:\d+}', 'itemDetail');
+    $router->get('/mail/{type}', 'mailPage');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -44,6 +46,12 @@ function itemIndex(){
 function top(){
     global $top_data;
     renderContents('top.html',$top_data);
+}
+
+function mailPage($vars){
+    global $mail_data;
+    
+    renderMail('mail_complete.html',$mail_data);
 }
 
 

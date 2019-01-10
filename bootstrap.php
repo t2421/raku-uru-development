@@ -23,3 +23,13 @@ function renderContents($html,$data=array()){
     $out = str_replace("<[-- BODY_CUSTOM_CONTENTS --]>",$body_custom,$out);
     echo $out;
 }
+
+
+function renderMail($html,$data=array()){
+    global $twig;
+    
+    $common = $twig->render("mail_layout.html");
+    $contents = $twig->render($html,$data);
+    $out = str_replace("<[-- MAIN_CONTENTS --]>",$contents,$common);
+    echo $out;
+}

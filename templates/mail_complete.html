@@ -1,0 +1,201 @@
+このメールは送信専用アドレスから送信されています。
+ご返信いただいても受け取ることが出来ません。
+--------
+
+《ご注意：本メールは注文時に自動で送信されるメールです。》
+{% set hogehoge = 20000 %}
+{% set hogehoge2 = 40000 %}
+{% set myArray = {"長野県":"We Are Nagano!","東京都":"We Are  Tokyo!"} %}
+{{lastName}}　{{firstName}}　様
+配列の表示できるか！{{myArray[kenName] }}
+計算できるか！{{hogehoge+hogehoge2}}
+
+ご注文いただきありがとうございます。
+{{shopName}}です。
+
+{% if reservationFlag is not empty %}
+以下の内容にて予約注文を承りますので、ご報告申し上げます。
+{% else %}以下の内容にてご注文を承りますので、ご報告申し上げます。
+{% endif %}
+
+注文番号：{{orderNo}}
+注文日時：{{ordOrderDate | date("yyyy年MM月dd日 HH時mm分ss秒") }}
+
+【注文者様情報】
+注文者　：{{lastName}}　{{firstName}}　（{{lastNameKana}}　{{firstNameKana}}）様
+住　所　：〒{{zipCd}}　{{kenName}}{{city}}
+　　　　　{{houseNo}}
+{% if building is not empty %}
+　　　　　{{building}}
+{% endif %}{% if companyName is not empty %}
+　　　　　{{companyName}}　{{departmentName}}
+{% endif %}
+メールアドレス：{{mailadd}}
+電話番号：{{tel}}
+{% if cellularphone is not empty %}
+携帯番号：{{cellularphone}}
+{% endif %}{% if fax is not empty %}
+FAX番号：{{fax}}
+{% endif %}{% if genderName is not empty %}
+性　別　：{{genderName}}
+{% endif %}{% if birthday is not empty %}
+生年月日：{{birthday | date("yyyy年MM月dd日") }}
+{% endif %}{% if free1Field is not empty %}
+{{free1Ttl | default("フリー項目１")}}：{{free1Field}}
+{% endif %}{% if free2Field is not empty %}
+{{free2Ttl | default("フリー項目２")}}：{{free2Field}}
+{% endif %}{% if free3Field is not empty %}
+{{free3Ttl | default("フリー項目３")}}：{{free3Field}}
+{% endif %}
+{% if senderName is not empty %}
+--
+ご依頼主：{{senderName}}　様
+{% endif %}
+{% if mmbLoginId is not empty %}
+--
+会員ID：{{mmbLoginId}}
+注文回数：{{mmbCountTotal}}
+{% if pointUseFlag is not empty %}
+獲得ポイント：{{pointCount}}ポイント（使用可能　{{mmbDecidedPointRemain}}ポイント）
+{% endif %}{% endif %}
+
+{% for dlvItem in deliveryList %}
+{% if deliveryList|length == 1 %}
+【配送先】
+{% else %}
+【配送先{{loop.index + 1}}】
+{% endif %}
+{% if dlvItem.storeName is not empty %}
+EC自宅外受け取りが指定されています。
+受取場所：{{dlvItem.storeName}}
+住　所　：〒{{dlvItem.storePostNo}}
+　　　　　{{dlvItem.storeAdd}}
+電話番号：{{dlvItem.storeTel}}
+配送方法：{{dlvItem.deliveryName}}
+配送便種：{% for item in dlvItem.deliveryTypeList %}
+{{item.deliveryType}} {% if loop.index + 1 < dlvItem.deliveryTypeList | length %}/{% endif %}
+{% endfor %}
+
+{% if dlvItem.storeDate is not empty %}
+受け取り日：{{dlvItem.storeDate | date("yyyy年MM月dd日") }}
+保管期限：{{dlvItem.storeLimit | date("yyyy年MM月dd日") }}
+{% endif %}
+{% else %}
+お届け先：{{dlvItem.dlvLastName}}　{{dlvItem.dlvFirstName}}　（{{dlvItem.dlvLastNameKana}}　{{dlvItem.dlvFirstNameKana}}）様
+住　所　：〒{{dlvItem.dlvZipCd}}　{{dlvItem.dlvKenName}}　{{dlvItem.dlvCity}}
+　　　　　{{dlvItem.dlvHouseNo}}
+{% if dlvItem.dlvBuilding is not empty %}
+　　　　　{{dlvItem.dlvBuilding}}
+{% endif %}
+{% if dlvItem.dlvCompanyName is not empty %}
+　　　　　{{dlvItem.dlvCompanyName}}　{{dlvItem.dlvDepartmentName}}
+{% endif %}
+電話番号：{{dlvItem.dlvTel}}
+--
+配送方法：{{dlvItem.deliveryName}}
+配送便種：{% for item in dlvItem.deliveryTypeList %}
+{{item.deliveryType}} {% if loop.index + 1 < dlvItem.deliveryTypeList | length %}/{% endif %}
+{% endfor %}
+
+{% if dlvItem.deliveryDate is not empty %}
+配送希望日：{{dlvItem.deliveryDate | date("yyyy年MM月dd日") }}
+{% endif %}{% if dlvItem.dlvOriginalTime is not empty %}
+配送希望時間帯：{{dlvItem.dlvOriginalTime}}
+{% endif %}
+{% endif %}
+
+注文商品情報：
+{% for item in dlvItem.ordItemList %}
+{% if item.itemCd is not empty %}
+（{{item.itemCd}}）{% endif %}{{item.itemName}}{% if item.variationName is not empty %}　{{item.variationName}}{% endif %}
+　{{item.orderItemPrice | numberformat("#,##0")}}　×　{{item.itemQuantity}}　=　{{(item.orderItemPrice * item.itemQuantity) | numberformat("#,##0")}}円
+{% if item.itemAttrPtrn == 2 %}
+{% for attr in item.attrList %}
+　{{attr.attrName}}：{{attr.attrVal}}
+{% endfor %}{% endif %}
+{% endfor %}
+{% if dlvItem.wrappingList is not empty %}--
+{% for item in dlvItem.wrappingList %}
+（{{item.wrapName}}）{{item.wrapDetailName}}　{{item.wrapPrice | numberformat("#,##0")}}円
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+【総合計金額】
+{% if subtotal is not empty %}
+商品小計：{{subtotal | numberformat("#,##0")}}円
+{% endif %}
+{% if sumWrappingAmount is not empty %}
+ラッピング：{{sumWrappingAmount | numberformat("#,##0")}}円
+{% endif %}
+{% if controlAmount is not empty %}
+{{amountControlTtl}}：{{controlAmount | numberformat("#,##0")}}円
+{% endif %}{% if fee is not empty %}
+決済手数料：{{fee | numberformat("#,##0")}}円
+{% endif %}{% if couponDiscount is not empty %}
+クーポン利用：{{couponDiscount | numberformat("#,##0")}}円
+{% endif %}{% if pointDiscount is not empty %}
+ポイント利用：{{pointDiscount | numberformat("#,##0")}}円
+{% endif %}
+{% for dlvItem in deliveryList %}
+{% if deliveryList|length == 1 %}
+{% if dlvItem.carriageUndecided == 1 or dlvItem.coolFeeUndecided == 1 %}
+送　料　：未確定
+{% elseif dlvItem.carriage is not empty %}
+送　料　：{{dlvItem.carriage | numberformat("#,##0")}}円
+{% endif %}{% if dlvItem.coolFee is not empty %}
+クール手数料：{{dlvItem.coolFee | numberformat("#,##0")}}円
+{% endif %}
+{% else %}
+{% if dlvItem.carriageUndecided == 1 or dlvItem.coolFeeUndecided == 1 %}
+配送先{{loop.index + 1}}送料：未確定
+{% elseif dlvItem.carriage is not empty %}
+配送先{{loop.index + 1}}送料：{{dlvItem.carriage | numberformat("#,##0")}}円
+{% endif %}{% if dlvItem.coolFee is not empty %}
+配送先{{loop.index + 1}}クール手数料：{{dlvItem.coolFee | numberformat("#,##0")}}円
+{% endif %}
+{% endif %}
+{% endfor %}
+--
+合　計　：{{orderSum | numberformat("#,##0")}}円
+
+【お支払い方法】
+お支払い方法：{{payName}}
+{% if billingNo is not empty %}
+払込票番号：{{billingNo}}
+払込表URL：{{billingUrl}}
+{% endif %}{% if companyCode is not empty %}
+企業コード：{{companyCode}}
+注文番号：{{orderNoF}}
+{% endif %}{% if econNo is not empty %}
+受付番号：{{econNo}}
+電話番号：{{receptionTel}}
+{% endif %}{% if expireDate is not empty %}
+支払期限：{{expireDate | slice(0,4)}}年{{expireDate | slice(4,6)}}月{{expireDate | slice(6,8)}}日
+{% endif %}{% if cnvstrPayUrl is not empty %}
+お支払方法：{{cnvstrPayUrl}}
+{% endif %}{% if payDetail is not empty %}
+{{payDetail}}
+{% endif %}{% if couponDiscount is not empty %}
+利用クーポンコード：{{couponCode}}　{{couponVal}}
+{% endif %}
+
+{% if inquiryList is not empty %}【アンケート】
+{% for qa in inquiryList %}
+{{qa.questionText}}：{% if qa.answerText is not empty %}{{qa.answerText}}
+{% else %}無回答
+{% endif %}
+{% endfor %}
+{% endif %}
+
+よろしくお願い申し上げます。
+
+--
+{{shopName}}
+{{shopUrl}}
+
+所在地　：{{lawAddress}}
+販売社名：{{lawSaleCompanyName}}
+電話番号：{{lawTel}}
+メールアドレス：{{lawMailAdd}}
+--
