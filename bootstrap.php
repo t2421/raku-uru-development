@@ -4,6 +4,10 @@ require_once __DIR__.'/data/common_data.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__.'/templates');
 $twig = new Twig_Environment($loader);
+$filter = new Twig_SimpleFilter('numberformat', function ($number) {
+	return number_format($number);
+});
+$twig->addFilter($filter);
 
 function render($html,$data=array()){
     global $twig;
