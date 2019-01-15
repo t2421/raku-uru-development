@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/data/top_data.php';
 require_once __DIR__.'/data/mail_data.php';
+require_once __DIR__.'/data/item_detail_data.php';
 
 $dispatcher= FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $router) {
     $router->get('/', 'index');
@@ -37,8 +38,9 @@ function index(){
     renderContents('welcome.html');
 }
 function itemDetail($vars){
+    global $item_detail_data;
     $item_id = $vars["id"];
-    renderContents('item_detail.html');
+    renderContents('item_detail.html',$item_detail_data);
 }
 function itemIndex(){
     renderContents('item_index.html');
